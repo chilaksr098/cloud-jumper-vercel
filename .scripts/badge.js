@@ -1,9 +1,14 @@
 const git = require(`simple-git`)(__dirname);
 const lineReplace = require(`line-replace`);
 
-async function main() {
+async function main () {
   const remote = await git.getRemotes(true);
-  const originRemote = remote.filter(r => r.name === `origin`)[0].refs.fetch.substring(4).slice(0, -4).replace(`:`, `/`);
+  const originFetch = remote.filter(r => r.name === `origin`)[0].refs.fetch;
+  const originRemote = originFetch
+    .replace(`https://`, ``)
+    .replace(`git@`, ``)
+    .replace(`.git`, ``)
+    .replace(`:`, `/`);
 
   const result = `[![GitHub Classroom Workflow](https://${originRemote}/actions/workflows/classroom.yml/badge.svg)](https://${originRemote}/actions/workflows/classroom.yml)`;
 

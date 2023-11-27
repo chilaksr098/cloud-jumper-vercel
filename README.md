@@ -1,19 +1,6 @@
-Assignment Name
+Final Project Template
 =====================
-![Assignment Checks](https://github.com/IT3049C/Assignment-Template/workflows/Assignment%20Checks/badge.svg)
 
-Instructions to this assignment can be found [here](#).
+Instructions to this assignment can be found [here](https://uc.instructure.com/courses/1641850/assignments/20048162).
 
-## Checklist:
-- [ ] update the assignment checks above to the correct link
-- [ ] make sure the assignment checks pass
-- [ ] fill out the self evaluation and Reflection
-- [ ] submit the repository link on Canvas
-
-## Self-Evaluation:
-
-how many points out of 20 do you deserve on this assignment:
-
-## Self-Reflection:
-
-### How long it took me to finish this?
+NOTE: While this repo does contain a starter template you can use for your project, you are not limited to what is included here. Feel free to add/remove dependencies as you see fit for your project.

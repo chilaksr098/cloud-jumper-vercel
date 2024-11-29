@@ -6,9 +6,6 @@ export class Preloader extends Scene {
   }
 
   init() {
-    // Display the background image
-    this.add.image(512, 384, "background");
-
     // Create the outline of the progress bar
     this.add.rectangle(512, 384, 468, 32).setStrokeStyle(1, 0xffffff);
 
@@ -25,13 +22,16 @@ export class Preloader extends Scene {
     // Set the base path for assets
     this.load.setPath("assets");
 
+    this.load.image('bg_layer1', 'bg_layer1.png');
+    this.load.image('bg_layer2', 'bg_layer2.png');
+    this.load.image('bg_layer3', 'bg_layer3.png');
+    this.load.image('bg_layer4', 'bg_layer4.png');
+
     // Load the texture atlas using the XML file
     this.load.atlasXML("sprites", "spritesheet.png", "spritesheet.xml");
   }
 
   create() {
-    // Start the MainMenu scene once loading is complete
-
     const coins = ["gold", "silver", "bronze"];
 
     coins.forEach((coin) => {
@@ -48,6 +48,9 @@ export class Preloader extends Scene {
       });
     });
 
+
+
+    // Start the MainMenu scene once loading is complete
     this.scene.start("MainMenu");
   }
 }

@@ -25,19 +25,29 @@ export class Preloader extends Scene {
     // Set the base path for assets
     this.load.setPath("assets");
 
-    // Load individual images
-    this.load.image("logo", "logo.png");
-    this.load.image("star", "star.png");
-
     // Load the texture atlas using the XML file
     this.load.atlasXML("sprites", "spritesheet.png", "spritesheet.xml");
   }
 
   create() {
-    // Optional: Log all loaded textures to the console for debugging
-    console.log(this.textures.list);
-
     // Start the MainMenu scene once loading is complete
+
+    const coins = ["gold", "silver", "bronze"];
+
+    coins.forEach((coin) => {
+      this.anims.create({
+        key: `spin_${coin}`,
+        frames: [
+          { key: "sprites", frame: `${coin}_1` },
+          { key: "sprites", frame: `${coin}_2` },
+          { key: "sprites", frame: `${coin}_3` },
+          { key: "sprites", frame: `${coin}_4` },
+        ],
+        frameRate: 8,
+        repeat: -1, // Loop indefinitely
+      });
+    });
+
     this.scene.start("MainMenu");
   }
 }

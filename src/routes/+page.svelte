@@ -4,11 +4,11 @@
   import PhaserGame, { type TPhaserRef } from "../game/PhaserGame.svelte";
 
   // The sprite can only be moved in the MainMenu Scene
-  let canMoveSprite = false;
+  let canMoveSprite = $state(false);
 
   //  References to the PhaserGame component (game and scene are exposed)
-  let phaserRef: TPhaserRef = { game: null, scene: null };
-  const spritePosition = { x: 0, y: 0 };
+  let phaserRef: TPhaserRef = $state({ game: null, scene: null });
+  const spritePosition = $state({ x: 0, y: 0 });
 
   const changeScene = () => {
     const scene = phaserRef.scene as MainMenu;
@@ -68,10 +68,10 @@
   <PhaserGame bind:phaserRef currentActiveScene={currentScene} />
   <div>
     <div>
-      <button class="button" on:click={changeScene}>Change Scene</button>
+      <button class="button" onclick={changeScene}>Change Scene</button>
     </div>
     <div>
-      <button class="button" disabled={canMoveSprite} on:click={moveSprite}
+      <button class="button" disabled={canMoveSprite} onclick={moveSprite}
         >Toggle Movement</button
       >
     </div>
@@ -80,7 +80,7 @@
       <pre>{JSON.stringify(spritePosition, null, 2)}</pre>
     </div>
     <div>
-      <button class="button" on:click={addSprite}>Add New Sprite</button>
+      <button class="button" onclick={addSprite}>Add New Sprite</button>
     </div>
   </div>
 </div>

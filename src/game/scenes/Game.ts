@@ -27,6 +27,7 @@ export class Game extends Scene {
 
     // Add our background image
     this.backgroundLayer1 = this.add.image(0, 0, "bg_layer1").setOrigin(0, 0);
+
     this.backgroundLayer1.setDisplaySize(this.camera.width, this.camera.height);
     this.physics.world.setBounds(
       0,
@@ -39,21 +40,23 @@ export class Game extends Scene {
       true
     );
 
-    this.addCharacter();
-    this.addInputListeners();
-
     // Create a static group for platforms
     this.platforms = this.physics.add.group({
       allowGravity: false,
-      immovable: true, // Platforms don't move when the player lands on them
+      immovable: true,
+      collideWorldBounds: true,
     });
 
-    // Add platforms to the group
-    this.addPlatform(this.camera.width / 2, this.camera.height - 270, 100);
-    this.addPlatform(this.camera.width / 2, this.camera.height - 370, 50);
-    this.addPlatform(this.camera.width / 2, this.camera.height - 430, 0);
-    this.addPlatform(this.camera.width / 2, this.camera.height - 470, -50);
-    this.addPlatform(this.camera.width / 2, this.camera.height - 570, -100);
+    for (let i = 0; i < 6; i++) {
+      this.addPlatform(
+        Phaser.Math.Between(150, this.camera.width - 150),
+        this.camera.height - i * 150,
+        this.getRandomPlatformMovement()
+      );
+    }
+
+    this.addCharacter();
+    this.addInputListeners();
 
     // Enable collision between the player and the platforms
     this.physics.add.collider(this.character, this.platforms);
@@ -67,7 +70,14 @@ export class Game extends Scene {
 
     // Center the character horizontally and position it at the bottom
     this.character.setOrigin(0.5, 1);
-    this.character.setPosition(this.camera.width / 2, this.camera.height - 270);
+
+    // Get the position of the first platform
+    const firstPlatform = this.platforms.getFirstAlive();
+
+    this.character.setPosition(
+      firstPlatform.x,
+      firstPlatform.y - firstPlatform.height
+    );
 
     this.character.setScale(0.66);
     this.character.setBounceX(1);
@@ -94,10 +104,6 @@ export class Game extends Scene {
     // Set horizontal movement
     platform.setVelocityX(movement);
 
-    // Ensure it stays within bounds
-    platform.setCollideWorldBounds(true);
-
-    // platform.setFriction(1);
     platform.setBounce(1);
     platform.setCollisionCategory(CollisionCategories.PLATFORM);
   }
@@ -153,7 +159,20 @@ export class Game extends Scene {
     this.scene.start("GameOver", this.input);
   }
 
+  getRandomPlatformMovement() {
+    // TODO - get harder as they get higher
+    // 20% chance of moving left or right
+    const moves = Phaser.Math.Between(0, 100);
+    if (moves < 20) {
+      return Phaser.Math.Between(-100, 100);
+    } else {
+      return 0;
+    }
+  }
+
   update(time: number, delta: number): void {
+    this.backgroundLayer1.setPosition(0, this.camera.scrollY);
+
     if (this.character.body && this.character.body.touching.down) {
       this.curJump = 0;
       this.jump();
@@ -168,9 +187,8 @@ export class Game extends Scene {
     if (this.character.y < this.lastPlatformY + 150 + this.camera.height) {
       const x = Phaser.Math.Between(50, this.camera.width - 50);
       const y = this.lastPlatformY - 150;
-      const movement = Phaser.Math.Between(-100, 100);
 
-      this.addPlatform(x, y, movement);
+      this.addPlatform(x, y, this.getRandomPlatformMovement());
       this.lastPlatformY = y;
     }
 

@@ -16,6 +16,8 @@ export class Game extends Scene {
   maxJumps: number = 2;
   score: number = 0;
 
+  lastPlatformY: number = 0;
+
   constructor() {
     super("Game");
   }
@@ -26,7 +28,16 @@ export class Game extends Scene {
     // Add our background image
     this.backgroundLayer1 = this.add.image(0, 0, "bg_layer1").setOrigin(0, 0);
     this.backgroundLayer1.setDisplaySize(this.camera.width, this.camera.height);
-    this.physics.world.setBounds(0, 0, this.camera.width, this.camera.height);
+    this.physics.world.setBounds(
+      0,
+      0,
+      this.camera.width,
+      this.camera.height,
+      true,
+      true,
+      false,
+      true
+    );
 
     this.addCharacter();
     this.addInputListeners();
@@ -146,6 +157,37 @@ export class Game extends Scene {
     if (this.character.body && this.character.body.touching.down) {
       this.curJump = 0;
       this.jump();
+    }
+
+    // Scroll the camera vertically to follow the player
+    if (this.character.y < this.camera.scrollY + this.camera.height / 2) {
+      this.camera.scrollY = this.character.y - this.camera.height / 2;
+    }
+
+    // Spawn new platforms as the player climbs
+    if (this.character.y < this.lastPlatformY + 150 + this.camera.height) {
+      const x = Phaser.Math.Between(50, this.camera.width - 50);
+      const y = this.lastPlatformY - 150;
+      const movement = Phaser.Math.Between(-100, 100);
+
+      this.addPlatform(x, y, movement);
+      this.lastPlatformY = y;
+    }
+
+    // Remove platforms below the camera view
+    this.platforms.children.iterate((platform) => {
+      if (
+        platform instanceof Phaser.Physics.Arcade.Sprite &&
+        platform.y > this.camera.scrollY + this.camera.height
+      ) {
+        platform.destroy();
+      }
+      return null;
+    });
+
+    // Game over if the player falls below the camera view
+    if (this.character.y > this.camera.scrollY + this.camera.height) {
+      this.gameOver();
     }
   }
 }

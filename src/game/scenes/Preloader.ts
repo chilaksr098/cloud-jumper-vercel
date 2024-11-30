@@ -51,6 +51,6 @@ export class Preloader extends Scene {
 
 
     // Start the MainMenu scene once loading is complete
-    this.scene.start("MainMenu");
+    this.scene.start("MainMenu", this.input);
   }
 }

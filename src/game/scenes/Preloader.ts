@@ -22,10 +22,10 @@ export class Preloader extends Scene {
     // Set the base path for assets
     this.load.setPath("assets");
 
-    this.load.image('bg_layer1', 'bg_layer1.png');
-    this.load.image('bg_layer2', 'bg_layer2.png');
-    this.load.image('bg_layer3', 'bg_layer3.png');
-    this.load.image('bg_layer4', 'bg_layer4.png');
+    this.load.image("bg_layer1", "bg_layer1.png");
+    this.load.image("bg_layer2", "bg_layer2.png");
+    this.load.image("bg_layer3", "bg_layer3.png");
+    this.load.image("bg_layer4", "bg_layer4.png");
 
     // Load the texture atlas using the XML file
     this.load.atlasXML("sprites", "spritesheet.png", "spritesheet.xml");
@@ -48,9 +48,8 @@ export class Preloader extends Scene {
       });
     });
 
-
-
     // Start the MainMenu scene once loading is complete
-    this.scene.start("MainMenu", this.input);
+    this.scene.start("Game", this.input);
+    // this.scene.start("GameOver", this.input);
   }
 }

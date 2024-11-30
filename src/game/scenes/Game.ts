@@ -25,6 +25,14 @@ export class Game extends Scene {
   create() {
     this.camera = this.cameras.main;
 
+    // Hide the player name input
+    document
+      .getElementById("playerName")
+      ?.closest(".name-input")
+      ?.classList.add("hidden");
+
+    document.querySelector(".menu-buttons")?.classList.add("hidden");
+
     // Add our background image
     this.backgroundLayer1 = this.add.image(0, 0, "bg_layer1").setOrigin(0, 0);
 

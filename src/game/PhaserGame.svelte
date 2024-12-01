@@ -15,7 +15,7 @@
   export const getScore = () => {
     return score;
   };
-  ``;
+
   let playerName = $state(localStorage.getItem("playerName")?.trim() || "");
 
   export const setPlayerName = (newPlayerName: string) => {
@@ -34,7 +34,6 @@
 
   interface Props {
     phaserRef?: TPhaserRef;
-    currentActiveScene: (scene: Scene) => void | undefined;
   }
 
   let {
@@ -42,7 +41,6 @@
       game: null,
       scene: null,
     }),
-    currentActiveScene,
   }: Props = $props();
 
   onMount(() => {
@@ -51,12 +49,9 @@
     EventBus.on("current-scene-ready", (scene_instance: Scene) => {
       phaserRef.scene = scene_instance;
 
-      if (currentActiveScene) {
-        currentActiveScene(scene_instance);
-        const name = window.localStorage.getItem("playerName");
-        if (name?.trim()) {
-          playerName = name;
-        }
+      const name = window.localStorage.getItem("playerName");
+      if (name?.trim()) {
+        playerName = name;
       }
     });
   });

@@ -71,6 +71,13 @@
 
 <div id="app">
   <PhaserGame bind:phaserRef currentActiveScene={currentScene} />
+  <div id="leaderboard" class="hidden">
+    <ul>
+      {#each topScores as score}
+        <li>{score.name}: {score.score}</li>
+      {/each}
+    </ul>
+  </div>
 </div>
 
 <style>
@@ -81,5 +88,26 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  #leaderboard {
+    position: absolute;
+    top: calc(50% + 50px);
+    left: calc(50%);
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 200px;
+    overflow-y: scroll;
+  }
+
+  #leaderboard ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #leaderboard li {
+    padding: 4px;
+    font-size: 32px;
   }
 </style>

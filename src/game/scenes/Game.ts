@@ -1,6 +1,6 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
-import { CollisionCategories } from "../util/CollisionCategories";
+import { CollisionCategories } from "../../lib/CollisionCategories";
 import { getScore, setScore } from "../PhaserGame.svelte";
 
 export class Game extends Scene {
@@ -33,6 +33,7 @@ export class Game extends Scene {
 
     document.querySelector(".main-menu-buttons")?.classList.add("hidden");
     document.querySelector(".game-over-menu-buttons")?.classList.add("hidden");
+    document.querySelector(".leaderboard-menu-buttons")?.classList.add("hidden");
 
     // Add our background image
     this.backgroundLayer1 = this.add.image(0, 0, "bg_layer1").setOrigin(0, 0);

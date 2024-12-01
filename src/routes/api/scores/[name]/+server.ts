@@ -1,4 +1,8 @@
-import { supabase } from "$lib/supabaseClient";
+import {
+  getSupabaseClientWithBearerToken,
+  supabase,
+} from "$lib/supabaseClient";
+import { createClient } from "@supabase/supabase-js";
 import { json } from "@sveltejs/kit";
 
 export async function GET({ params }) {
@@ -14,9 +18,30 @@ export async function GET({ params }) {
 }
 
 export async function POST({ request, params }) {
+  const accessToken = request.headers
+    .get("Authorization")
+    ?.replace("Bearer ", "");
+
+  if (!accessToken) {
+    return json({ error: "User not authenticated" }, { status: 401 });
+  }
+
+  // Initialize Supabase client with the user's access token
+  const supabase = getSupabaseClientWithBearerToken(accessToken);
+
+  // Optional: Verify the user's authentication
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError || !user) {
+    return json({ error: "User not authenticated" }, { status: 401 });
+  }
+
   const requestBody = await request.json();
   const score = requestBody.score;
   const name = params.name;
+
   const { data, error } = await supabase
     .from("top_scores")
     .insert([{ name, score }])

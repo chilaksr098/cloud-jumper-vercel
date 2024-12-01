@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import { gameConfig } from "../main";
 
 export class Preloader extends Scene {
   constructor() {
@@ -7,14 +8,27 @@ export class Preloader extends Scene {
 
   init() {
     // Create the outline of the progress bar
-    this.add.rectangle(512, 384, 468, 32).setStrokeStyle(1, 0xffffff);
+    const width = Number(gameConfig.width);
+    const height = Number(gameConfig.height);
+    this.add.rectangle(
+      width / 2,
+      height / 2,
+      200,
+      20,
+    ).setStrokeStyle(1, 0xffffff);
 
     // Create the progress bar itself
-    const bar = this.add.rectangle(512 - 230, 384, 4, 28, 0xffffff);
+    const bar = this.add.rectangle(
+      width / 2,
+      height / 2,
+      200,
+      20,
+      0xffffff,
+    );
 
     // Update the progress bar based on the loading progress
     this.load.on("progress", (progress: number) => {
-      bar.width = 4 + 460 * progress;
+      bar.width = 200 * progress;
     });
   }
 

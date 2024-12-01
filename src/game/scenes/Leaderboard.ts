@@ -1,6 +1,5 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
-import { getScore } from "../PhaserGame.svelte";
 
 export class Leaderboard extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera;
@@ -19,6 +18,10 @@ export class Leaderboard extends Scene {
     this.backgroundLayer1 = this.add.image(0, 0, "bg_layer1").setOrigin(0, 0);
     this.backgroundLayer1.setDisplaySize(this.camera.width, this.camera.height);
     this.physics.world.setBounds(0, 0, this.camera.width, this.camera.height);
+
+    document.querySelector(".main-menu-buttons")?.classList.add("hidden");
+    document.querySelector(".game-over-menu-buttons")?.classList.add("hidden");
+    document.querySelector(".leaderboard-menu-buttons")?.classList.remove("hidden");
 
     this.LeaderboardText = this.add
       .text(this.camera.width / 2, this.camera.height / 2 - 100, "Top Scores", {

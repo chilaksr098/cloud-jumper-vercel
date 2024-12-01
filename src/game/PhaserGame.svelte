@@ -15,7 +15,7 @@
   export const getScore = () => {
     return score;
   };
-
+  ``;
   let playerName = $state(localStorage.getItem("playerName")?.trim() || "");
 
   export const setPlayerName = (newPlayerName: string) => {
@@ -72,14 +72,20 @@
   }
 </script>
 
-<div id="game-container">
+<div id="game-container" class="relative">
   <div class="hud">
     <div class="score">
       <span class="score-value">{score}</span>
       <span class="score-label">Score</span>
     </div>
   </div>
-  <div class="game-over-menu-buttons hidden">
+  <div class="main-menu-buttons menu-buttons">
+    <button class="btn" onclick={() => switchToScene("Game")}>Start</button>
+    <button class="btn" onclick={() => switchToScene("Leaderboard")}
+      >Leaderboard</button
+    >
+  </div>
+  <div class="game-over-menu-buttons menu-buttons hidden">
     <button class="btn" onclick={() => switchToScene("Game")}
       >Play Again?</button
     >
@@ -87,10 +93,9 @@
       >Main Menu</button
     >
   </div>
-  <div class="main-menu-buttons">
-    <button class="btn" onclick={() => switchToScene("Game")}>Start</button>
-    <button class="btn" onclick={() => switchToScene("Leaderboard")}
-      >Leaderboard</button
+  <div class="leaderboard-menu-buttons menu-buttons hidden">
+    <button class="btn" onclick={() => switchToScene("MainMenu")}
+      >Main Menu</button
     >
   </div>
   <div class="name-input hidden">
@@ -138,16 +143,11 @@
     opacity: 0.5;
   }
 
-  .main-menu-buttons,
-  .game-over-menu-buttons {
+  .menu-buttons {
     position: absolute;
     top: calc(50% + 200px);
     left: calc(50%);
     transform: translate(-50%, -50%);
-  }
-
-  .hidden {
-    display: none;
   }
 
   .btn {
@@ -165,5 +165,25 @@
       border: 1px solid #0ec3c9;
       color: #0ec3c9;
     }
+  }
+
+  .hud {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 20px;
+    font-family: "Arial Black";
+  }
+
+  :global(.hidden) {
+    display: none;
+  }
+  :global(.relative) {
+    position: relative;
+  }
+
+  .menu-buttons:not(.hidden) {
+    display: flex;
+    justify-content: center;
   }
 </style>

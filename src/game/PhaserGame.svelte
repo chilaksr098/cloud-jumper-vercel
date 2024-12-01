@@ -15,6 +15,16 @@
   export const getScore = () => {
     return score;
   };
+
+  let playerName = $state(localStorage.getItem("playerName")?.trim() || "");
+
+  export const setPlayerName = (newPlayerName: string) => {
+    playerName = newPlayerName;
+  };
+
+  export const getPlayerName = () => {
+    return playerName;
+  };
 </script>
 
 <script lang="ts">
@@ -34,8 +44,6 @@
     }),
     currentActiveScene,
   }: Props = $props();
-
-  let playerName = $state(localStorage.getItem("playerName")?.trim() || "");
 
   onMount(() => {
     phaserRef.game = StartGame("game-container");

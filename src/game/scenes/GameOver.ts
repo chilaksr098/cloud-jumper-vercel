@@ -1,6 +1,6 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
-import { getScore } from "../PhaserGame.svelte";
+import { getPlayerName, getScore } from "../PhaserGame.svelte";
 
 export class GameOver extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera;
@@ -90,8 +90,21 @@ export class GameOver extends Scene {
   }
 
   changeScene() {
-    const playerName = this.nameInput.value.trim();
-    console.log("Player Name Entered:", playerName);
     this.scene.start("MainMenu", this.input);
+  }
+
+  postScore() {
+    const playerName = getPlayerName();
+    const score = getScore();
+    // Send post request to our backend
+    fetch("/api/scores/" + playerName, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        score,
+      }),
+    });
   }
 }

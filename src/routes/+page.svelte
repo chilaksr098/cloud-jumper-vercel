@@ -2,6 +2,11 @@
   import type { Scene } from "phaser";
   import type { MainMenu } from "../game/scenes/MainMenu";
   import PhaserGame, { type TPhaserRef } from "../game/PhaserGame.svelte";
+  import { page } from "$app/stores";
+
+  let { topScores } = $page.data;
+
+  console.log("Top Scores:", topScores);
 
   // The sprite can only be moved in the MainMenu Scene
   let canMoveSprite = $state(false);
@@ -24,7 +29,7 @@
 
     if (scene) {
       // Get the update logo position
-      (scene as MainMenu).moveLogo(({ x, y }) => {
+      (scene as MainMenu).moveLogo(({ x, y }: { x: number; y: number }) => {
         spritePosition.x = x;
         spritePosition.y = y;
       });

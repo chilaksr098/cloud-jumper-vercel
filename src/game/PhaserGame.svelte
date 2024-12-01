@@ -5,6 +5,16 @@
     game: Game | null;
     scene: Scene | null;
   };
+
+  let score = $state(0);
+
+  export const setScore = (newScore: number) => {
+    score = newScore;
+  };
+
+  export const getScore = () => {
+    return score;
+  };
 </script>
 
 <script lang="ts">
@@ -44,24 +54,29 @@
   });
 
   function playAgain() {
-  window.localStorage.setItem("playerName", playerName);
-  if (phaserRef.scene) {
-    phaserRef.scene.scene.stop(); // Stops the current scene
-    phaserRef.scene.scene.start("Game"); // Starts the new scene
+    window.localStorage.setItem("playerName", playerName);
+    if (phaserRef.scene) {
+      phaserRef.scene.scene.stop(); // Stops the current scene
+      phaserRef.scene.scene.start("Game"); // Starts the new scene
+    }
   }
-}
 
-function mainMenu() {
-  window.localStorage.setItem("playerName", playerName);
-  if (phaserRef.scene) {
-    phaserRef.scene.scene.stop(); // Stops the current scene
-    phaserRef.scene.scene.start("MainMenu"); // Starts the main menu scene
+  function mainMenu() {
+    window.localStorage.setItem("playerName", playerName);
+    if (phaserRef.scene) {
+      phaserRef.scene.scene.stop(); // Stops the current scene
+      phaserRef.scene.scene.start("MainMenu"); // Starts the main menu scene
+    }
   }
-}
-
 </script>
 
 <div id="game-container">
+  <div class="hud">
+    <div class="score">
+      <span class="score-value">{score}</span>
+      <span class="score-label">Score</span>
+    </div>
+  </div>
   <div class="menu-buttons hidden">
     <button class="btn" onclick={playAgain}>Play Again?</button>
     <button class="btn" onclick={mainMenu}>Main Menu</button>
@@ -85,6 +100,7 @@ function mainMenu() {
   }
 
   .name-input input {
+    font-family: "Arial Black", sans-serif;
     width: 400px;
     height: 25px;
     font-size: 24px;

@@ -1,6 +1,7 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 import { CollisionCategories } from "../util/CollisionCategories";
+import { getScore, setScore } from "../PhaserGame.svelte";
 
 export class Game extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera;
@@ -25,7 +26,6 @@ export class Game extends Scene {
   create() {
     this.camera = this.cameras.main;
 
-    // Hide the player name input
     document
       .getElementById("playerName")
       ?.closest(".name-input")
@@ -187,6 +187,13 @@ export class Game extends Scene {
     }
 
     // Scroll the camera vertically to follow the player
+    setScore(
+      Math.max(
+        Math.floor(this.character.y - this.camera.height) * -1,
+        getScore()
+      )
+    );
+
     if (this.character.y < this.camera.scrollY + this.camera.height / 2) {
       this.camera.scrollY = this.character.y - this.camera.height / 2;
     }

@@ -1,5 +1,6 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
+import { getScore } from "../PhaserGame.svelte";
 
 export class GameOver extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera;
@@ -63,14 +64,19 @@ export class GameOver extends Scene {
     menuButtons?.classList.remove("hidden");
 
     this.add
-      .text(this.camera.width / 2, this.camera.height / 2 + 65, "12345", {
-        fontFamily: "Arial Black",
-        fontSize: 24,
-        color: "#ffffff",
-        stroke: "#000000",
-        strokeThickness: 3,
-        align: "center",
-      })
+      .text(
+        this.camera.width / 2,
+        this.camera.height / 2 + 65,
+        getScore() + "",
+        {
+          fontFamily: "Arial Black",
+          fontSize: 24,
+          color: "#ffffff",
+          stroke: "#000000",
+          strokeThickness: 3,
+          align: "center",
+        }
+      )
       .setOrigin(0);
 
     this.add

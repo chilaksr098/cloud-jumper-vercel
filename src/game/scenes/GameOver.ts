@@ -4,7 +4,7 @@ import { getScore } from "../PhaserGame.svelte";
 
 export class GameOver extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera;
-  background: Phaser.GameObjects.Image;
+  backgroundLayer1: Phaser.GameObjects.Image;
   gameOverText: Phaser.GameObjects.Text;
   nameInput: HTMLInputElement;
 
@@ -18,16 +18,7 @@ export class GameOver extends Scene {
     // Add our background image
     this.backgroundLayer1 = this.add.image(0, 0, "bg_layer1").setOrigin(0, 0);
     this.backgroundLayer1.setDisplaySize(this.camera.width, this.camera.height);
-    this.physics.world.setBounds(
-      0,
-      0,
-      this.camera.width,
-      this.camera.height,
-      true,
-      true,
-      false,
-      true
-    );
+    this.physics.world.setBounds(0, 0, this.camera.width, this.camera.height);
 
     this.gameOverText = this.add
       .text(this.camera.width / 2, this.camera.height / 2 - 100, "Game over!", {
@@ -60,7 +51,7 @@ export class GameOver extends Scene {
 
     const playerNameInput = document.getElementById("playerName");
     playerNameInput?.closest(".name-input")?.classList.remove("hidden");
-    const menuButtons = document.querySelector(".menu-buttons");
+    const menuButtons = document.querySelector(".game-over-menu-buttons");
     menuButtons?.classList.remove("hidden");
 
     this.add

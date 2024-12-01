@@ -53,20 +53,14 @@
     });
   });
 
-  function playAgain() {
+  function switchToScene(scene: string) {
     window.localStorage.setItem("playerName", playerName);
     if (phaserRef.scene) {
       phaserRef.scene.scene.stop(); // Stops the current scene
-      phaserRef.scene.scene.start("Game"); // Starts the new scene
+      phaserRef.scene.scene.start(scene); // Starts the new scene
+      score = 0;
     }
-  }
-
-  function mainMenu() {
-    window.localStorage.setItem("playerName", playerName);
-    if (phaserRef.scene) {
-      phaserRef.scene.scene.stop(); // Stops the current scene
-      phaserRef.scene.scene.start("MainMenu"); // Starts the main menu scene
-    }
+    return null;
   }
 </script>
 
@@ -77,9 +71,19 @@
       <span class="score-label">Score</span>
     </div>
   </div>
-  <div class="menu-buttons hidden">
-    <button class="btn" onclick={playAgain}>Play Again?</button>
-    <button class="btn" onclick={mainMenu}>Main Menu</button>
+  <div class="game-over-menu-buttons hidden">
+    <button class="btn" onclick={() => switchToScene("Game")}
+      >Play Again?</button
+    >
+    <button class="btn" onclick={() => switchToScene("MainMenu")}
+      >Main Menu</button
+    >
+  </div>
+  <div class="main-menu-buttons">
+    <button class="btn" onclick={() => switchToScene("Game")}>Start</button>
+    <button class="btn" onclick={() => switchToScene("Leaderboard")}
+      >Leaderboard</button
+    >
   </div>
   <div class="name-input hidden">
     <input
@@ -126,7 +130,8 @@
     opacity: 0.5;
   }
 
-  .menu-buttons {
+  .main-menu-buttons,
+  .game-over-menu-buttons {
     position: absolute;
     top: calc(50% + 200px);
     left: calc(50%);

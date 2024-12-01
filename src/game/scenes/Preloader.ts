@@ -49,7 +49,6 @@ export class Preloader extends Scene {
     });
 
     // Start the MainMenu scene once loading is complete
-    this.scene.start("Game", this.input);
-    // this.scene.start("GameOver", this.input);
+    this.scene.start("MainMenu", this.input);
   }
 }

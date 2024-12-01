@@ -31,7 +31,8 @@ export class Game extends Scene {
       ?.closest(".name-input")
       ?.classList.add("hidden");
 
-    document.querySelector(".menu-buttons")?.classList.add("hidden");
+    document.querySelector(".main-menu-buttons")?.classList.add("hidden");
+    document.querySelector(".game-over-menu-buttons")?.classList.add("hidden");
 
     // Add our background image
     this.backgroundLayer1 = this.add.image(0, 0, "bg_layer1").setOrigin(0, 0);
@@ -189,7 +190,7 @@ export class Game extends Scene {
     // Scroll the camera vertically to follow the player
     setScore(
       Math.max(
-        Math.floor(this.character.y - this.camera.height) * -1,
+        Math.floor(((this.character.y - this.camera.height) / 3) * -1 - 32),
         getScore()
       )
     );
@@ -199,7 +200,7 @@ export class Game extends Scene {
     }
 
     // Spawn new platforms as the player climbs
-    if (this.character.y < this.lastPlatformY + 150 + this.camera.height) {
+    if (this.character.y < this.lastPlatformY + 500 + this.camera.height) {
       const x = Phaser.Math.Between(50, this.camera.width - 50);
       const y = this.lastPlatformY - 150;
 
@@ -219,7 +220,8 @@ export class Game extends Scene {
     });
 
     // Game over if the player falls below the camera view
-    if (this.character.y > this.camera.scrollY + this.camera.height) {
+    if (this.character.y > this.camera.scrollY + this.camera.height + 100) {
+      // Added a buffer, it was too sensitive
       this.gameOver();
     }
   }

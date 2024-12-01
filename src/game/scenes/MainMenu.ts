@@ -14,6 +14,7 @@ export class MainMenu extends Scene {
   }
 
   create() {
+
     document
       .getElementById("playerName")
       ?.closest(".name-input")
@@ -21,7 +22,11 @@ export class MainMenu extends Scene {
 
     document.querySelector(".main-menu-buttons")?.classList.remove("hidden");
     document.querySelector(".game-over-menu-buttons")?.classList.add("hidden");
-    document.querySelector(".leaderboard-menu-buttons")?.classList.add("hidden");
+    document
+      .querySelector(".leaderboard-menu-buttons")
+      ?.classList.add("hidden");
+    document.getElementById("leaderboard")?.classList.add("hidden");
+    document.querySelector(".hud")?.classList.add("hidden");
 
     const width = Number(gameConfig.width);
     const height = Number(gameConfig.height);

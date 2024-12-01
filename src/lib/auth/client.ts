@@ -16,6 +16,7 @@ export async function signInWith(provider: Provider | null = null) {
   if (error) {
     console.log("Error signing in:", error);
   }
+  
   return data;
 }
 

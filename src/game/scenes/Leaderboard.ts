@@ -14,6 +14,9 @@ export class Leaderboard extends Scene {
   create() {
     this.camera = this.cameras.main;
 
+    // Show leaderboard
+    document.getElementById("leaderboard")?.classList.remove("hidden");
+
     // Add our background image
     this.backgroundLayer1 = this.add.image(0, 0, "bg_layer1").setOrigin(0, 0);
     this.backgroundLayer1.setDisplaySize(this.camera.width, this.camera.height);

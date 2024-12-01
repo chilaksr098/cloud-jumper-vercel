@@ -17,6 +17,8 @@ export class GameOver extends Scene {
   create() {
     this.camera = this.cameras.main;
 
+    document.querySelector(".hud")?.classList.add("hidden");
+
     // Add our background image
     this.backgroundLayer1 = this.add.image(0, 0, "bg_layer1").setOrigin(0, 0);
     this.backgroundLayer1.setDisplaySize(this.camera.width, this.camera.height);
@@ -100,48 +102,49 @@ export class GameOver extends Scene {
     // Check if the user is already signed in
     let {
       data: { session },
+      error: sessionError,
     } = await supabase.auth.getSession();
 
+    if (sessionError) {
+      console.error("Error fetching session:", sessionError);
+      return;
+    }
+
+    // Sign in the user anonymously if no session exists
     if (!session) {
-      // Generate random credentials for anonymous sign-in
-      const randomId = crypto.randomUUID();
-      const email = `guest_${randomId}@example.com`;
-      const password = crypto.randomUUID();
-
-      // Sign up the user anonymously
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-
-      if (error) {
-        console.error("Error signing up anonymously:", error);
-        return;
-      }
-
-      session = data.session;
-
-      // Optionally, store the credentials in localStorage to maintain the session
-      localStorage.setItem("anonUser", JSON.stringify({ email, password }));
+      const data = await signInWith();
+      session = data?.session;
 
       if (!session) {
-        console.error("Error signing up anonymously:", error);
+        console.error("Failed to sign in anonymously.");
         return;
       }
     }
 
     const accessToken = session.access_token;
-    const playerName = getPlayerName();
+    const playerName = getPlayerName() || "Player"; // Fallback to "Player" if name is null/undefined
     const score = getScore();
 
-    // Send POST request to your backend with the access token
-    fetch("/api/scores/" + playerName, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({ score }),
-    });
+    try {
+      const response = await fetch(`/api/scores/${playerName}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ score }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error posting score:", errorData);
+        return;
+      }
+
+      const result = await response.json();
+      console.log("Score submitted successfully:", result);
+    } catch (error) {
+      console.error("Error during fetch:", error);
+    }
   }
 }

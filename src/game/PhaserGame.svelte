@@ -68,13 +68,13 @@
 </script>
 
 <div id="game-container" class="relative">
-  <div class="hud">
+  <div class="hud hidden">
     <div class="score">
       <span class="score-value">{score}</span>
       <span class="score-label">Score</span>
     </div>
   </div>
-  <div class="main-menu-buttons menu-buttons">
+  <div class="main-menu-buttons menu-buttons hidden">
     <button class="btn" onclick={() => switchToScene("Game")}>Start</button>
     <button class="btn" onclick={() => switchToScene("Leaderboard")}
       >Leaderboard</button
@@ -180,5 +180,9 @@
   .menu-buttons:not(.hidden) {
     display: flex;
     justify-content: center;
+  }
+
+  :global(*) {
+    user-select: none; /* Prevent text selection */
   }
 </style>

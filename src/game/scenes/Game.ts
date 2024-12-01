@@ -33,7 +33,11 @@ export class Game extends Scene {
 
     document.querySelector(".main-menu-buttons")?.classList.add("hidden");
     document.querySelector(".game-over-menu-buttons")?.classList.add("hidden");
-    document.querySelector(".leaderboard-menu-buttons")?.classList.add("hidden");
+    document
+      .querySelector(".leaderboard-menu-buttons")
+      ?.classList.add("hidden");
+    document.getElementById("leaderboard")?.classList.add("hidden");
+    document.querySelector(".hud")?.classList.remove("hidden");
 
     // Add our background image
     this.backgroundLayer1 = this.add.image(0, 0, "bg_layer1").setOrigin(0, 0);
@@ -71,6 +75,7 @@ export class Game extends Scene {
     // Enable collision between the player and the platforms
     this.physics.add.collider(this.character, this.platforms);
 
+    this.lastPlatformY = 0;
     EventBus.emit("current-scene-ready", this);
   }
 
@@ -201,6 +206,14 @@ export class Game extends Scene {
     }
 
     // Spawn new platforms as the player climbs
+    console.log(
+      "this.character.y:",
+      this.character.y,
+      "this.lastPlatformY:",
+      this.lastPlatformY,
+      "this.camera.height:",
+      this.camera.height
+    );
     if (this.character.y < this.lastPlatformY + 500 + this.camera.height) {
       const x = Phaser.Math.Between(50, this.camera.width - 50);
       const y = this.lastPlatformY - 150;
@@ -221,8 +234,7 @@ export class Game extends Scene {
     });
 
     // Game over if the player falls below the camera view
-    if (this.character.y > this.camera.scrollY + this.camera.height + 100) {
-      // Added a buffer, it was too sensitive
+    if (this.character.y > this.camera.scrollY + this.camera.height + 200) {
       this.gameOver();
     }
   }

@@ -1,37 +1,18 @@
 <script lang="ts">
-  import type { Scene } from "phaser";
-  import type { MainMenu } from "../game/scenes/MainMenu";
   import PhaserGame, { type TPhaserRef } from "../game/PhaserGame.svelte";
   import { page } from "$app/stores";
+  import { getLeaderboard, setLeaderboard } from "$lib/leaderboard.svelte";
 
-  let { topScores } = $page.data;
-
-  console.log("Top Scores:", topScores);
-
-  // The sprite can only be moved in the MainMenu Scene
-  let canMoveSprite = $state(false);
-
+  setLeaderboard($page.data.topScores);
   //  References to the PhaserGame component (game and scene are exposed)
   let phaserRef: TPhaserRef = $state({ game: null, scene: null });
-  const spritePosition = $state({ x: 0, y: 0 });
-
-  const changeScene = () => {
-    const scene = phaserRef.scene as MainMenu;
-
-    if (scene) {
-      // Call the changeScene method defined in the `MainMenu`, `Game` and `GameOver` Scenes
-      scene.changeScene();
-    }
-  };
-
-
 </script>
 
 <div id="app">
   <PhaserGame bind:phaserRef />
   <div id="leaderboard" class="hidden">
     <ul>
-      {#each topScores as score}
+      {#each getLeaderboard() as score}
         <li>{score.name}: {score.score}</li>
       {/each}
     </ul>

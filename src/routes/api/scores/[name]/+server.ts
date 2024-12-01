@@ -2,8 +2,8 @@ import {
   getSupabaseClientWithBearerToken,
   supabase,
 } from "$lib/supabaseClient";
-import { createClient } from "@supabase/supabase-js";
 import { json } from "@sveltejs/kit";
+import { GET as GET_Scores } from "../+server";
 
 export async function GET({ params }) {
   console.log("Params:", params);
@@ -50,5 +50,6 @@ export async function POST({ request, params }) {
   if (error) {
     return json(error);
   }
-  return json(data);
+
+  return await GET_Scores();
 }

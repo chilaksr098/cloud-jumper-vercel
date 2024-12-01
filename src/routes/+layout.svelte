@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-    <title>Phaser Svelte Template</title>
+    <title>Cloud Chaser</title>
 </svelte:head>
 
 {@render children?.()}

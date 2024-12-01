@@ -3,6 +3,7 @@ import { Scene } from "phaser";
 import { getPlayerName, getScore } from "../PhaserGame.svelte";
 import { signInWith } from "$lib/auth/client";
 import { supabase } from "$lib/supabaseClient";
+import { setLeaderboard } from "$lib/leaderboard.svelte";
 
 export class GameOver extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera;
@@ -137,12 +138,11 @@ export class GameOver extends Scene {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Error posting score:", errorData);
         return;
       }
 
-      const result = await response.json();
-      console.log("Score submitted successfully:", result);
+      const topScores = await response.json();
+      setLeaderboard(topScores);
     } catch (error) {
       console.error("Error during fetch:", error);
     }

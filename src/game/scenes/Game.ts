@@ -250,7 +250,7 @@ export class Game extends Scene {
       this.lastPlatformY = y;
 
       // Add new enemies as the player progresses
-      if (this.character.y < this.lastEnemyY + 300) {
+      if (this.character.y < this.lastEnemyY - this.camera.height) {
         this.addEnemies();
       }
     }

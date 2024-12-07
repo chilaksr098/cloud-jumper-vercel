@@ -43,6 +43,7 @@
     "@supabase/auth-helpers-sveltekit": "^0.13.0",
     "@supabase/supabase-js": "^2.46.2",
     "@sveltejs/adapter-vercel": "^5.5.0",
-    "phaser": "^3.87.0"
+    "phaser": "^3.87.0",
+    "template-svelte": "file:"
   }
 }

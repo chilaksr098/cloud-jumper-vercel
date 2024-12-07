@@ -8,7 +8,7 @@ export class Game extends Scene {
   backgroundLayer1: Phaser.GameObjects.Image;
   character: Phaser.Physics.Arcade.Sprite;
   platforms: Phaser.Physics.Arcade.Group;
-  enemies: Phaser.Physics.Arcade.Group;  // Group for enemies
+  enemies: Phaser.Physics.Arcade.Group; // Group for enemies
 
   gameText: Phaser.GameObjects.Text;
 
@@ -19,6 +19,7 @@ export class Game extends Scene {
 
   lastPlatformY: number = 0;
   lastEnemyY: number = 0; // Track the last enemy's Y position
+  scoreBonus: number = 0; // Track the score bonus
 
   constructor() {
     super("Game");
@@ -76,7 +77,7 @@ export class Game extends Scene {
       );
     }
 
-    this.addEnemies();  // Initial enemy spawn
+    this.addEnemies(); // Initial enemy spawn
     this.addCharacter();
     this.addInputListeners();
 
@@ -84,7 +85,13 @@ export class Game extends Scene {
     this.physics.add.collider(this.character, this.platforms);
 
     // Enable collision between the player and the enemies
-    this.physics.add.collider(this.character, this.enemies, this.hitEnemy, null, this);
+    this.physics.add.collider(
+      this.character,
+      this.enemies,
+      this.hitEnemy,
+      undefined,
+      this
+    );
 
     this.lastPlatformY = 0;
     EventBus.emit("current-scene-ready", this);
@@ -136,12 +143,15 @@ export class Game extends Scene {
 
   addEnemies() {
     // Add enemies above the camera view to spawn randomly
-    const numEnemies = Phaser.Math.Between(1, 3);  // Random number of enemies to spawn
+    const numEnemies = Phaser.Math.Between(1, 3); // Random number of enemies to spawn
     for (let i = 0; i < numEnemies; i++) {
       const x = Phaser.Math.Between(100, this.camera.width - 100);
-      const y = Phaser.Math.Between(this.camera.scrollY - 200, this.camera.scrollY - 100);
-      
-      const enemy = this.enemies.create(x, y, "sprites", "flyMan_stand");  // Assuming "enemy_idle" is the idle frame of an enemy sprite
+      const y = Phaser.Math.Between(
+        this.camera.scrollY - 200,
+        this.camera.scrollY - 100
+      );
+
+      const enemy = this.enemies.create(x, y, "sprites", "flyMan_stand"); // Assuming "enemy_idle" is the idle frame of an enemy sprite
       enemy.setOrigin(0.5, 1);
       enemy.setScale(0.5);
 
@@ -154,9 +164,34 @@ export class Game extends Scene {
     }
   }
 
-  hitEnemy() {
-    console.log("Player hit an enemy!");
-    this.gameOver();  // End the game if the player hits an enemy
+  hitEnemy(
+    character: Phaser.Types.Physics.Arcade.GameObjectWithBody,
+    enemy: Phaser.Types.Physics.Arcade.GameObjectWithBody
+  ) {
+    // Ensure both objects are sprites
+    if (
+      character instanceof Phaser.Physics.Arcade.Sprite &&
+      enemy instanceof Phaser.Physics.Arcade.Sprite
+    ) {
+      // If they hit from the top, they killed the enemy
+      if (character.y < enemy.y) {
+        this.scoreBonus += 100;
+        // Kill the enemy
+        enemy.setVelocityX(0);
+        (enemy.body as Phaser.Physics.Arcade.Body).setAllowGravity(true);
+        enemy.setGravityY(500);
+
+        // Make the enemy fall with gravity
+
+        setTimeout(() => {
+          enemy.destroy();
+        }, 3 * 1000);
+        return null;
+      }
+    }
+
+    this.gameOver(); // End the game if the player hits an enemy
+    return null;
   }
 
   addInputListeners() {
@@ -232,7 +267,8 @@ export class Game extends Scene {
     // Scroll the camera vertically to follow the player
     setScore(
       Math.max(
-        Math.floor(((this.character.y - this.camera.height) / 3) * -1 - 32),
+        Math.floor(((this.character.y - this.camera.height) / 3) * -1 - 32) +
+          this.scoreBonus,
         getScore()
       )
     );
@@ -267,9 +303,13 @@ export class Game extends Scene {
     });
 
     this.enemies.children.iterate((enemy) => {
-      if (enemy instanceof Phaser.Physics.Arcade.Sprite && enemy.y > this.camera.scrollY + this.camera.height) {
+      if (
+        enemy instanceof Phaser.Physics.Arcade.Sprite &&
+        enemy.y > this.camera.scrollY + this.camera.height
+      ) {
         enemy.destroy();
       }
+      return null;
     });
 
     // Game over if the player falls too far

@@ -5,7 +5,9 @@ import { MainMenu } from "./scenes/MainMenu";
 import { AUTO, Game } from "phaser";
 import { Preloader } from "./scenes/Preloader";
 import { Leaderboard } from "./scenes/Leaderboard";
+import { Enemy } from "./scenes/Enemy";
 
+//i cant take this class. some students are good but the others are misbehaved. the class before was nice, but their language was vuguar. this class has the most amount of students in the class and that might be troublesome
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 const config: Phaser.Types.Core.GameConfig = {

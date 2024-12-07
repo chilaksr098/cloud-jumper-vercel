@@ -198,14 +198,14 @@ export class Game extends Scene {
   }
 
   left() {
-    this.character.setVelocityX(-200 * this.currentGameSpeed);
+    this.character.setVelocityX(-200);
     if (this.character.x < 0) {
       this.character.x = this.camera.width;
     }
   }
 
   right() {
-    this.character.setVelocityX(200 * this.currentGameSpeed);
+    this.character.setVelocityX(200);
     if (this.character.x > this.camera.width) {
       this.character.x = 0;
     }
@@ -217,6 +217,7 @@ export class Game extends Scene {
 
   gameOver() {
     this.scene.start("GameOver", this.input);
+    this.currentGameSpeed = 1;
   }
 
   getRandomPlatformMovement() {
@@ -249,7 +250,7 @@ export class Game extends Scene {
 
       // Increase speed every 200 points
       if (Math.floor(this.score / 200) > Math.floor((this.score - 1) / 200)) {
-        this.currentGameSpeed += 0.2; // Increase game speed
+        this.currentGameSpeed += 0.1; // Increase game speed
         // Update the game speed display
         this.gameSpeedText.setText(`Speed: ${this.currentGameSpeed.toFixed(1)}x`);
       }

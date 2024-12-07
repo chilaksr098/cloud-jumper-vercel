@@ -20,6 +20,9 @@ importers:
       phaser:
         specifier: ^3.87.0
         version: 3.87.0
+      template-svelte:
+        specifier: 'file:'
+        version: file:(@sveltejs/kit@2.8.2(@sveltejs/vite-plugin-svelte@4.0.2(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1)(terser@5.36.0)))(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1)(terser@5.36.0)))(rollup@4.27.4)
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^3.2.0
@@ -966,6 +969,9 @@ packages:
     resolution: {integrity: sha512-DZ4yORTwrbTj/7MZYq2w+/ZFdI6OZ/f9SFHR+71gIVUZhOQPHzVCLpvRnPgyaMpfWxxk/4ONva3GQSyNIKRv6A==}
     engines: {node: '>=10'}
 
+  'template-svelte@file:':
+    resolution: {directory: '', type: directory}
+
   terser@5.36.0:
     resolution: {integrity: sha512-IYV9eNMuFAV4THUspIRXkLakHnV6XO7FEdtKjf/mDyrnqUg9LnlOn6/RwRvM9SZjR4GUq8Nk8zj67FzVARr74w==}
     engines: {node: '>=10'}
@@ -1884,6 +1890,20 @@ snapshots:
       minizlib: 2.1.2
       mkdirp: 1.0.4
       yallist: 4.0.0
+
+  template-svelte@file:(@sveltejs/kit@2.8.2(@sveltejs/vite-plugin-svelte@4.0.2(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1)(terser@5.36.0)))(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1)(terser@5.36.0)))(rollup@4.27.4):
+    dependencies:
+      '@supabase/auth-helpers-sveltekit': 0.13.0(@supabase/supabase-js@2.46.2)(@sveltejs/kit@2.8.2(@sveltejs/vite-plugin-svelte@4.0.2(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1)(terser@5.36.0)))(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1)(terser@5.36.0)))
+      '@supabase/supabase-js': 2.46.2
+      '@sveltejs/adapter-vercel': 5.5.0(@sveltejs/kit@2.8.2(@sveltejs/vite-plugin-svelte@4.0.2(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1)(terser@5.36.0)))(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1)(terser@5.36.0)))(rollup@4.27.4)
+      phaser: 3.87.0
+    transitivePeerDependencies:
+      - '@sveltejs/kit'
+      - bufferutil
+      - encoding
+      - rollup
+      - supports-color
+      - utf-8-validate
 
   terser@5.36.0:
     dependencies:

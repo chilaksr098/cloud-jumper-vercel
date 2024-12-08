@@ -46,7 +46,7 @@ export class MainMenu extends Scene {
       .setAlpha(0); // Start the logo as invisible
 
     // Resize the logo (example: 40% scale)
-    this.logo.setScale(0.4); // Scales down the logo to 40%
+    this.logo.setScale(0.8); // Scales down the logo to 40%
 
     // Add a fade-in effect to the logo (from alpha 0 to alpha 1)
     this.tweens.add({

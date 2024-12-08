@@ -143,22 +143,27 @@
     top: calc(50% + 200px);
     left: calc(50%);
     transform: translate(-50%, -50%);
+    gap: 0.5rem;
   }
 
   .btn {
+    --primary: #232323;
+    --text: #fff;
     min-width: 200px;
     font-size: 1.5em;
     padding: 10px;
-    background-color: #000000;
-    color: rgba(255, 255, 255, 0.87);
-    border: 1px solid rgba(255, 255, 255, 0.87);
+    background-color: var(--primary);
+    color: var(--text);
+    border-radius: 0.5rem;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s;
+    font-family: "Arial Black", sans-serif;
 
     &:hover {
-      border: 1px solid #0ec3c9;
-      color: #0ec3c9;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      background-color: var(--text);
     }
   }
 

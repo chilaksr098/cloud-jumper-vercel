@@ -159,20 +159,49 @@ export class Game extends Scene {
         character.body.x < enemy.body.x + enemy.body.width;
 
       if (character.y < enemy.y && isHorizontallyAligned) {
+        // Player kills enemy by jumping on it
         this.scoreBonus += 100;
         enemy.setVelocityX(0);
         (enemy.body as Phaser.Physics.Arcade.Body).setAllowGravity(true);
         enemy.setGravityY(500);
 
+        // Create dust effect when killing the enemy
+        this.createExplosionEffect(enemy.x, enemy.y);
+
+        // Destroy enemy after short delay
         setTimeout(() => {
           enemy.destroy();
-        }, 3 * 1000);
-        return null;
+        }, 300); // Short delay to prevent issues when destroying enemy
+
+        // Stop further collision checks between character and this enemy
+        this.physics.world.removeCollider(this.character, enemy);
+        return;  // Early return to stop further processing in this function
       }
     }
 
+    // If player touches enemy (without killing), create dust and trigger game over
+    this.createExplosionEffect(character.x, character.y);
     this.gameOver();
-    return null;
+  }
+
+  createExplosionEffect(x: number, y: number) {
+    const dust = this.add.sprite(x, y, "dust").setOrigin(0.5, 1);
+    dust.setScale(1);
+    dust.setAlpha(1);
+
+    // Play dust animation if you have one
+    dust.anims.play("dust", true);
+
+    // Fade out the dust effect after 500 ms
+    this.tweens.add({
+      targets: dust,
+      alpha: 0,
+      ease: "Linear",
+      duration: 500,
+      onComplete: () => {
+        dust.destroy();
+      },
+    });
   }
 
   addInputListeners() {

@@ -28,6 +28,12 @@ export class Game extends Scene {
     super("Game");
   }
 
+  preload() {
+    // Preload dust image and animation
+    this.load.image('dust', 'assets/dust.png'); // Ensure the path is correct
+    this.load.spritesheet('dust', 'assets/dust.png', { frameWidth: 32, frameHeight: 32 }); // Adjust frame width/height if needed
+  }
+
   create() {
     this.camera = this.cameras.main;
 
@@ -70,6 +76,7 @@ export class Game extends Scene {
       immovable: true,
     });
 
+    // Spawn initial platforms
     for (let i = 0; i < 6; i++) {
       this.addPlatform(
         Phaser.Math.Between(150, this.camera.width - 150),
@@ -119,6 +126,7 @@ export class Game extends Scene {
     platform.body.checkCollision.down = false;
     platform.body.checkCollision.left = false;
     platform.body.checkCollision.right = false;
+
     platform.setVelocityX(movement * this.currentGameSpeed); // Apply game speed multiplier
     platform.setBounce(1);
     platform.setCollisionCategory(CollisionCategories.PLATFORM);
@@ -157,20 +165,49 @@ export class Game extends Scene {
         character.body.x < enemy.body.x + enemy.body.width;
 
       if (character.y < enemy.y && isHorizontallyAligned) {
+        // Player kills enemy by jumping on it
         this.scoreBonus += 100;
         enemy.setVelocityX(0);
         (enemy.body as Phaser.Physics.Arcade.Body).setAllowGravity(true);
         enemy.setGravityY(500);
 
+        // Create dust effect when killing the enemy
+        this.createExplosionEffect(enemy.x, enemy.y);
+
+        // Destroy enemy after short delay
         setTimeout(() => {
           enemy.destroy();
-        }, 3 * 1000);
-        return null;
+        }, 300); // Short delay to prevent issues when destroying enemy
+
+        // Stop further collision checks between character and this enemy
+        this.physics.world.removeCollider(this.character, enemy);
+        return;  // Early return to stop further processing in this function
       }
     }
 
+    // If player touches enemy (without killing), create dust and trigger game over
+    this.createExplosionEffect(character.x, character.y);
     this.gameOver();
-    return null;
+  }
+
+  createExplosionEffect(x: number, y: number) {
+    const dust = this.add.sprite(x, y, "dust").setOrigin(0.5, 1);
+    dust.setScale(0.05);
+    dust.setAlpha(1);
+
+    // Play dust animation if you have one
+    dust.anims.play("dust", true);
+
+    // Fade out the dust effect after 500 ms
+    this.tweens.add({
+      targets: dust,
+      alpha: 0,
+      ease: "Linear",
+      duration: 500,
+      onComplete: () => {
+        dust.destroy();
+      },
+    });
   }
 
   addInputListeners() {
@@ -243,10 +280,25 @@ export class Game extends Scene {
     if (newScore > this.score) {
       this.score = newScore;
 
-      // Increase speed every 200 points
+      // Increase game speed every 200 points, but with a more gradual curve
+      const speedIncreaseThreshold = Math.floor(this.score / 200);
       if (Math.floor(this.score / 200) > Math.floor((this.score - 1) / 200)) {
-        this.currentGameSpeed += 0.05; // Increase game speed
+        this.currentGameSpeed += 0.05 * Math.min(speedIncreaseThreshold, 5); // Limit the speed increase
         this.character.setGravityY(500 * this.currentGameSpeed);
+
+        // Increase platform and enemy speeds dynamically
+        this.platforms.children.iterate((platform) => {
+          if (platform instanceof Phaser.Physics.Arcade.Sprite) {
+            platform.setVelocityX(this.getRandomPlatformMovement() * this.currentGameSpeed);
+          }
+        });
+
+        this.enemies.children.iterate((enemy) => {
+          if (enemy instanceof Phaser.Physics.Arcade.Sprite) {
+            const movement = Phaser.Math.Between(-50, 50) * this.currentGameSpeed;
+            enemy.setVelocityX(movement); // Increase enemy movement
+          }
+        });
       }
     }
 
@@ -254,18 +306,21 @@ export class Game extends Scene {
       this.camera.scrollY = this.character.y - this.camera.height / 2;
     }
 
+    // Add platforms as the player progresses upward
     if (this.character.y < this.lastPlatformY + 500 + this.camera.height) {
       const x = Phaser.Math.Between(50, this.camera.width - 50);
       const y = this.lastPlatformY - 150;
 
       this.addPlatform(x, y, this.getRandomPlatformMovement());
       this.lastPlatformY = y;
-
-      if (this.character.y < this.lastEnemyY - this.camera.height) {
-        this.addEnemies();
-      }
     }
 
+    // Ensure enemies are added when the player is climbing up and near the top of the screen
+    if (this.character.y < this.lastEnemyY - this.camera.height) {
+      this.addEnemies();
+    }
+
+    // Destroy platforms that are off-screen
     this.platforms.children.iterate((platform) => {
       if (
         platform instanceof Phaser.Physics.Arcade.Sprite &&
@@ -276,6 +331,7 @@ export class Game extends Scene {
       return null;
     });
 
+    // Destroy enemies that are off-screen
     this.enemies.children.iterate((enemy) => {
       if (
         enemy instanceof Phaser.Physics.Arcade.Sprite &&

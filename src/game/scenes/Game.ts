@@ -152,7 +152,11 @@ export class Game extends Scene {
       character instanceof Phaser.Physics.Arcade.Sprite &&
       enemy instanceof Phaser.Physics.Arcade.Sprite
     ) {
-      if (character.y < enemy.y) {
+      const isHorizontallyAligned =
+        character.body.x + character.body.width > enemy.body.x &&
+        character.body.x < enemy.body.x + enemy.body.width;
+
+      if (character.y < enemy.y && isHorizontallyAligned) {
         this.scoreBonus += 100;
         enemy.setVelocityX(0);
         (enemy.body as Phaser.Physics.Arcade.Body).setAllowGravity(true);

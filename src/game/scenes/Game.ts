@@ -93,17 +93,6 @@ export class Game extends Scene {
 
     this.lastPlatformY = 0;
 
-    // Add the game speed text display and ensure it stays at the top
-    this.gameSpeedText = this.add
-      .text(
-        this.camera.width - 10, // Move to the right side, with a margin
-        10, // Set the y-position to the top of the screen
-        `Speed: 1x`, // Initial game speed display
-        { fontSize: "32px", fill: "#fff", align: "right" }
-      )
-      .setOrigin(1, 0); // Set origin to the right (x=1) and top (y=0) for proper alignment
-
-    this.gameSpeedText.setScrollFactor(0); // Keeps the text fixed in place
     EventBus.emit("current-scene-ready", this);
   }
 
@@ -253,11 +242,6 @@ export class Game extends Scene {
       // Increase speed every 200 points
       if (Math.floor(this.score / 200) > Math.floor((this.score - 1) / 200)) {
         this.currentGameSpeed += 0.05; // Increase game speed
-
-        // Update the game speed display
-        this.gameSpeedText.setText(
-          `Speed: ${this.currentGameSpeed.toFixed(1)}x`
-        );
         this.character.setGravityY(500 * this.currentGameSpeed);
       }
     }

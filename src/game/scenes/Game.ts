@@ -28,6 +28,12 @@ export class Game extends Scene {
     super("Game");
   }
 
+  preload() {
+    // Preload dust image and animation
+    this.load.image('dust', 'assets/dust.png'); // Ensure the path is correct
+    this.load.spritesheet('dust', 'assets/dust.png', { frameWidth: 32, frameHeight: 32 }); // Adjust frame width/height if needed
+  }
+
   create() {
     this.camera = this.cameras.main;
 

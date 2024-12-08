@@ -42,10 +42,19 @@ export class MainMenu extends Scene {
     this.logo = this.add
       .image(width / 2, height / 2 - 100, "LogoCloud") // Position the logo at the center
       .setOrigin(0.5) // Center it
-      .setDepth(100); // Make sure it's above other elements
+      .setDepth(100) // Make sure it's above other elements
+      .setAlpha(0); // Start the logo as invisible
 
-    // Resize the logo (example: 50% scale)
-    this.logo.setScale(0.4); // Scales down the logo to 40% 
+    // Resize the logo (example: 40% scale)
+    this.logo.setScale(0.4); // Scales down the logo to 40%
+
+    // Add a fade-in effect to the logo (from alpha 0 to alpha 1)
+    this.tweens.add({
+      targets: this.logo,
+      alpha: 1, // End alpha value
+      duration: 1000, // Time for the fade (in milliseconds)
+      ease: "Power2", // Easing for smooth transition
+    });
 
     EventBus.emit("current-scene-ready", this);
   }

@@ -1,20 +1,23 @@
 import { type GameObjects, Scene } from "phaser";
-
 import { EventBus } from "../EventBus";
 import { gameConfig } from "../main";
 
 export class MainMenu extends Scene {
   backgroundLayer1: GameObjects.Image;
-  logo: GameObjects.Image;
-  title: GameObjects.Text;
+  logo: GameObjects.Image; // This will be the logo image
   logoTween: Phaser.Tweens.Tween | null;
 
   constructor() {
     super("MainMenu");
   }
 
-  create() {
+  preload() {
+    // Preload the logo image
+    this.load.image("LogoCloud", "assets/LogoCloud.png"); // Update the path if needed
+    this.load.image("bg_layer1", "assets/bg_layer1.png"); // Same for the background image
+  }
 
+  create() {
     document
       .getElementById("playerName")
       ?.closest(".name-input")
@@ -31,21 +34,18 @@ export class MainMenu extends Scene {
     const width = Number(gameConfig.width);
     const height = Number(gameConfig.height);
 
-    // Add our background image
+    // Add the background image
     this.backgroundLayer1 = this.add.image(0, 0, "bg_layer1").setOrigin(0, 0);
     this.backgroundLayer1.setDisplaySize(width, height);
 
-    this.title = this.add
-      .text(width / 2, height / 2 - 100, "Cloud Chaser", {
-        fontFamily: "Arial Black",
-        fontSize: 38,
-        color: "#ffffff",
-        stroke: "#000000",
-        strokeThickness: 8,
-        align: "center",
-      })
-      .setOrigin(0.5)
-      .setDepth(100);
+    // Add the logo image in the center
+    this.logo = this.add
+      .image(width / 2, height / 2 - 100, "LogoCloud") // Position the logo at the center
+      .setOrigin(0.5) // Center it
+      .setDepth(100); // Make sure it's above other elements
+
+    // Resize the logo (example: 50% scale)
+    this.logo.setScale(0.4); // Scales down the logo to 40% 
 
     EventBus.emit("current-scene-ready", this);
   }

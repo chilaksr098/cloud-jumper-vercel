@@ -192,7 +192,7 @@ export class Game extends Scene {
 
   createExplosionEffect(x: number, y: number) {
     const dust = this.add.sprite(x, y, "dust").setOrigin(0.5, 1);
-    dust.setScale(1);
+    dust.setScale(0.05);
     dust.setAlpha(1);
 
     // Play dust animation if you have one

@@ -46,6 +46,7 @@ export class Game extends Scene {
 
     this.backgroundLayer1 = this.add.image(0, 0, "bg_layer1").setOrigin(0, 0);
     this.backgroundLayer1.setDisplaySize(this.camera.width, this.camera.height);
+    this.backgroundLayer1.setScrollFactor(0);
 
     this.physics.world.setBounds(
       0,
@@ -230,7 +231,6 @@ export class Game extends Scene {
   }
 
   update(time: number, delta: number): void {
-    this.backgroundLayer1.setPosition(0, this.camera.scrollY);
 
     if (this.character.body && this.character.body.touching.down) {
       this.curJump = 0;

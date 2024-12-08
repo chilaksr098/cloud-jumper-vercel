@@ -70,6 +70,7 @@ export class Game extends Scene {
       immovable: true,
     });
 
+    // Spawn initial platforms
     for (let i = 0; i < 6; i++) {
       this.addPlatform(
         Phaser.Math.Between(150, this.camera.width - 150),
@@ -119,6 +120,7 @@ export class Game extends Scene {
     platform.body.checkCollision.down = false;
     platform.body.checkCollision.left = false;
     platform.body.checkCollision.right = false;
+
     platform.setVelocityX(movement * this.currentGameSpeed); // Apply game speed multiplier
     platform.setBounce(1);
     platform.setCollisionCategory(CollisionCategories.PLATFORM);
@@ -254,18 +256,21 @@ export class Game extends Scene {
       this.camera.scrollY = this.character.y - this.camera.height / 2;
     }
 
+    // Add platforms as the player progresses upward
     if (this.character.y < this.lastPlatformY + 500 + this.camera.height) {
       const x = Phaser.Math.Between(50, this.camera.width - 50);
       const y = this.lastPlatformY - 150;
 
       this.addPlatform(x, y, this.getRandomPlatformMovement());
       this.lastPlatformY = y;
-
-      if (this.character.y < this.lastEnemyY - this.camera.height) {
-        this.addEnemies();
-      }
     }
 
+    // Ensure enemies are added when the player is climbing up and near the top of the screen
+    if (this.character.y < this.lastEnemyY - this.camera.height) {
+      this.addEnemies();
+    }
+
+    // Destroy platforms that are off-screen
     this.platforms.children.iterate((platform) => {
       if (
         platform instanceof Phaser.Physics.Arcade.Sprite &&
@@ -276,6 +281,7 @@ export class Game extends Scene {
       return null;
     });
 
+    // Destroy enemies that are off-screen
     this.enemies.children.iterate((enemy) => {
       if (
         enemy instanceof Phaser.Physics.Arcade.Sprite &&

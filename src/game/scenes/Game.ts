@@ -245,10 +245,25 @@ export class Game extends Scene {
     if (newScore > this.score) {
       this.score = newScore;
 
-      // Increase speed every 200 points
+      // Increase game speed every 200 points, but with a more gradual curve
+      const speedIncreaseThreshold = Math.floor(this.score / 200);
       if (Math.floor(this.score / 200) > Math.floor((this.score - 1) / 200)) {
-        this.currentGameSpeed += 0.05; // Increase game speed
+        this.currentGameSpeed += 0.05 * Math.min(speedIncreaseThreshold, 5); // Limit the speed increase
         this.character.setGravityY(500 * this.currentGameSpeed);
+
+        // Increase platform and enemy speeds dynamically
+        this.platforms.children.iterate((platform) => {
+          if (platform instanceof Phaser.Physics.Arcade.Sprite) {
+            platform.setVelocityX(this.getRandomPlatformMovement() * this.currentGameSpeed);
+          }
+        });
+
+        this.enemies.children.iterate((enemy) => {
+          if (enemy instanceof Phaser.Physics.Arcade.Sprite) {
+            const movement = Phaser.Math.Between(-50, 50) * this.currentGameSpeed;
+            enemy.setVelocityX(movement); // Increase enemy movement
+          }
+        });
       }
     }
 

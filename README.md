@@ -1,5 +1,7 @@
 # Phaser Svelte Template
 
+https://cloud-jumper.vercel.app/
+
 This is a Phaser 3 project template that uses the Svelte framework, TypeScript and Vite for bundling. It includes a bridge for Svelte to Phaser game communication, hot-reloading for quick development workflow and scripts to generate production-ready builds.
 
 ### Versions
